@@ -36,4 +36,11 @@ const DBClient = new Client({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
 });
-DBClient.connect();
+
+DBClient.connect((err) => {
+  if (err) {
+    Logger.error("error while connecting to DB");
+  } else {
+    Logger.info("connected to DB successfully");
+  }
+});
