@@ -1,33 +1,29 @@
 import dotenv from "dotenv";
-import express from "express";
+import express, { NextFunction } from "express";
 import Logger from "./utils/logger";
 import logMiddleware from "./utils/logMiddleware";
 import Helmet from "helmet";
 import appCors from "./utils/cors";
 import { Client } from "pg";
-
-import userRouter from "./routes/user.route";
-import stockRouter from "./routes/stock.route";
-import { logger } from "express-winston";
+import apiRouter from "./controllers/api.controller";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(appCors);
-app.use(Helmet());
-app.use(logMiddleware);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+if (process.env.NODE_ENV === "production") {
+  app.use(Helmet());
+}
+
+app.use(logMiddleware);
 
 app.listen(port, () => {
   return Logger.info(`Express is listening at http://localhost:${port}`);
 });
 
-app.use("/user", userRouter);
-app.use("/stock", stockRouter);
+app.use("/", apiRouter);
 
 const DBClient = new Client({
   host: process.env.DB_HOST,
