@@ -5,7 +5,7 @@ import logMiddleware from "./utils/logMiddleware";
 import Helmet from "helmet";
 import appCors from "./utils/cors";
 import { Client } from "pg";
-import apiRouter from "./controllers/api.controller";
+import router from "./controllers/api.controller";
 
 dotenv.config();
 const app = express();
@@ -23,7 +23,7 @@ app.listen(port, () => {
   return Logger.info(`Express is listening at http://localhost:${port}`);
 });
 
-app.use("/", apiRouter);
+app.use("/", router);
 
 const DBClient = new Client({
   host: process.env.DB_HOST,

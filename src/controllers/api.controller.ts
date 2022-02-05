@@ -1,12 +1,21 @@
 import passport from "passport";
 import express, { Router } from "express";
+import UserController from "./user.controller";
 
-const apiRouter = Router();
+const router = Router();
 
-apiRouter.use(passport.initialize());
+router.use(passport.initialize());
 
-// TODO: add authorization middleware here
+// Authentication Routes
+router.get(
+  "/users/login",
+  passport.authenticate("local", { session: false }),
+  UserController.instance.read // TODO: maybe add userAuthController in addition to user controller
+);
 
 // app routes
 
-export default apiRouter;
+// create new user
+router.post("/users/register", UserController.instance.create);
+
+export default router;
